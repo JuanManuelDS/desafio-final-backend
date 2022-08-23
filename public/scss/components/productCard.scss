@@ -1,0 +1,34 @@
+div#productCards__container {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+
+    div.productCards{
+        height: 200px;
+        width: 100%;
+        display: flex;
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 15px;
+        position: relative;
+
+        div.productCards__info {
+            p.productCards__price{
+                font-weight: bold;
+            }
+        }
+
+        img {
+            height: 180px;
+            width: auto;
+            margin-right: 20px;
+        }
+
+        button.productCards__button {
+            position: absolute;
+            right: 25px;
+            bottom: 10px;
+        }
+
+    }
+}

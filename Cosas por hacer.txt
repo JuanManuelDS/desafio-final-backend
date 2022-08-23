@@ -1,0 +1,4 @@
+Lista de cosas a hacer en el proyecto:
+- Crear un método para modificar un producto en container.js y en index.js(servidor) hacer el router.put correspondiente
+- Poner algún botón que diga 'Administrador (checkbutton o algo)' y que si no se habilita no deja manejar ciertas cosas como eliminar/modificar productos
+- Queda toda la API del carrito por hacer, métodos y página! 

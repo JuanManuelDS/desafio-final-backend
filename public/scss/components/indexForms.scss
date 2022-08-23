@@ -1,0 +1,19 @@
+div#index__forms{
+    background-color: rgb(223, 223, 223);
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    border-radius: 30px;
+    margin-top: 20px;
+    div {
+        width: 70%;
+        font-weight: bold;
+        color: rgb(0, 0, 223);
+        margin: 15px;
+        input, select {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+    }
+    
+}

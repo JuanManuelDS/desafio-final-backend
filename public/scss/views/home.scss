@@ -1,0 +1,41 @@
+*{
+    margin: 0px;
+}
+
+.index__main {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    div.index__options{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 1080px;
+        button {
+            width: 80%;
+            height: 50px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background-color: rgb(255, 136, 0);
+            border-radius: 15px;
+            border: 2px solid rgb(161, 86, 0);
+
+            a{
+                text-decoration: none;
+                color: black;
+                display: inline-block;
+                width: 100%;
+            }
+        }
+        button:hover{
+            background-color: rgb(216, 115, 0);
+        }
+    }
+}
