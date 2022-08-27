@@ -1,0 +1,61 @@
+#carrito__main {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 80px;
+
+    div#productsCart__container {
+        display: flex;
+        flex-direction: column;
+        width: 80vw;
+    
+        div.products__cart{
+            height: 200px;
+            width: 100%;
+            display: flex;
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 15px;
+            position: relative;
+    
+            div.productsCart__info {
+                p.producsCart__price{
+                    font-weight: bold;
+                }
+                .productsCart__id {
+                    display: none;
+                }
+            }
+    
+            img {
+                height: 180px;
+                width: auto;
+                margin-right: 20px;
+            }
+    
+            button.productsCart__delete {
+                position: absolute;
+                right: 25px;
+                bottom: 10px;
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+    
+        }
+    }
+
+    #deleteAll__button {
+        background-color: orangered;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        height: 50px;
+        width: 200px;
+        padding: 10px;
+    }
+}
+

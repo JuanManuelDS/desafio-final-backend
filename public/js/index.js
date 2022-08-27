@@ -26,12 +26,19 @@ Nuevo título <br><input type="text" name="productTitle" id="productTitle"><br>
 Nueva descripción <br><input type="text" name="productDescription" id="productDescription"><br>
 Nuevo precio <br><input type="text" name="productPrice" id="productPrice"><br>
 Nueva imagen <br><input type="text" name="productImage" id="productImage"><br>
+Stock <br><input type="text" name="productStock" id="productStock"><br>
 Nueva categoría <br><select name="productCategory" id="productCategory">
     <option value="ropa">Ropa</option>
     <option value="libro">Libro</option>
 </select><br>
 <button onclick="modifyProduct()">Modificar</button>
 </div>`;
+
+let isAdmin = false;
+
+function adminLogin() {
+  isAdmin = true;
+}
 
 function showAddForm() {
   document.getElementById("index__forms").innerHTML = addForm;
@@ -44,13 +51,23 @@ function showGetByIdForm() {
 }
 
 function showDeleteForm() {
-  document.getElementById("index__results").innerHTML = "";
-  document.getElementById("index__forms").innerHTML = deleteForm;
+  if (isAdmin) {
+    document.getElementById("index__results").innerHTML = "";
+    document.getElementById("index__forms").innerHTML = deleteForm;
+  } else {
+    document.getElementById("index__results").innerHTML =
+      "Necesitas ser administrador para eliminar productos";
+  }
 }
 
 function showModifyProductForm() {
-  document.getElementById("index__results").innerHTML = "";
-  document.getElementById("index__forms").innerHTML = modifyProductForm;
+  if (isAdmin) {
+    document.getElementById("index__results").innerHTML = "";
+    document.getElementById("index__forms").innerHTML = modifyProductForm;
+  } else {
+    document.getElementById("index__results").innerHTML =
+      "Necesitas ser admin para modificar productos";
+  }
 }
 
 function addProduct() {
@@ -140,17 +157,30 @@ function modifyProduct() {
   const newDescription = document.getElementById("productDescription").value;
   const newCategory = document.getElementById("productCategory").value;
   const newImage = document.getElementById("productImage").value;
+  const newStock = document.getElementById("productStock").value;
   const newProductInfo = {
     title: newTitle,
     price: newPrice,
     description: newDescription,
     type: newCategory,
     thumbnail: newImage,
+    stock: newStock,
   };
 
   fetch(`/api/productos/${productId}`, {
     method: "PUT",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(newProductInfo),
-  });
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success == "ok") {
+        document.getElementById("index__results").innerHTML =
+          "<h3>El producto ha sido modificado correctamente</h3>";
+        document.getElementById("index__forms").innerHTML = "";
+      } else {
+        document.getElementById("index__results").innerHTML =
+          "<h3>Ha ocurrido algún problema al intentar modificar el producto</h3>";
+      }
+    });
 }

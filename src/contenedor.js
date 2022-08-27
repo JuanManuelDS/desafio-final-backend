@@ -45,6 +45,34 @@ class Contenedor {
     return producto.id;
   }
 
+  modify(producto) {
+    let listaProductos = this.getAll();
+    let indiceProductoPorEliminar = listaProductos.findIndex(
+      (item) => item.id == producto.id
+    );
+    if (indiceProductoPorEliminar != -1) {
+      producto.timestamp = moment().format("YYYY/MM/D hh:mm:ss");
+      listaProductos[indiceProductoPorEliminar] = { ...producto };
+    } else {
+      console.log(
+        "(modify()) => No existe un producto con el número de ID " + producto.id
+      );
+      return false;
+    }
+
+    try {
+      fs.writeFileSync(
+        __dirname + "/listaProductos.json",
+        JSON.stringify(listaProductos)
+      );
+      return true;
+    } catch (error) {
+      console.log(
+        "Hubo un error al intentar reescribir el archivo en modify(): " + error
+      );
+    }
+  }
+
   assignId(listaProductos) {
     let id = 0;
 
@@ -72,10 +100,7 @@ class Contenedor {
 
   getById(numeroID) {
     let listaProductos = this.getAll();
-    let producto;
-    listaProductos.forEach((element) => {
-      if (element.id == numeroID) producto = element;
-    });
+    let producto = listaProductos.find((element) => element.id == numeroID);
     if (producto) {
       return producto;
     } else {

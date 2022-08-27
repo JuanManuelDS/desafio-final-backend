@@ -16,6 +16,9 @@ div#productCards__container {
             p.productCards__price{
                 font-weight: bold;
             }
+            .productCards__id {
+                display: none;
+            }
         }
 
         img {

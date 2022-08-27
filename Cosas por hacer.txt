@@ -1,4 +1,5 @@
 Lista de cosas a hacer en el proyecto:
-- Crear un método para modificar un producto en container.js y en index.js(servidor) hacer el router.put correspondiente
-- Poner algún botón que diga 'Administrador (checkbutton o algo)' y que si no se habilita no deja manejar ciertas cosas como eliminar/modificar productos
-- Queda toda la API del carrito por hacer, métodos y página! 
+- Queda toda la API del carrito por hacer, métodos y página!
+- Fijarse que no queden espacios en blanco en todos los formularios en index 
+
+{"title":"Monseñor Quijote","price":"8","description":"A Graham Greene le bastó hacer que un sacerdote católico en vías de retirarse, y un chofer comunista, que reniega de la vida después de la muerte, y de la humanidad misma, compartieran un viaje ...","thumbnail":"https://imagessl7.casadellibro.com/a/l/t1/97/9788435013697.jpg","type":"libro","id":6,"timestamp":"2022/08/23 02:26:27"}

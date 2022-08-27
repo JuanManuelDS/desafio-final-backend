@@ -28,8 +28,14 @@ nav {
           color: white; }
         nav div ul li a:hover {
           color: white; }
-    nav div svg {
-      margin: 0px 40px 0px 0px; }
+    nav div a {
+      text-decoration: none;
+      color: white;
+      padding: none; }
+      nav div a svg {
+        margin: 0px 40px 0px 0px; }
+    nav div a:hover {
+      color: white; }
 
 div#productCards__container {
   display: flex;
@@ -45,6 +51,8 @@ div#productCards__container {
     position: relative; }
     div#productCards__container div.productCards div.productCards__info p.productCards__price {
       font-weight: bold; }
+    div#productCards__container div.productCards div.productCards__info .productCards__id {
+      display: none; }
     div#productCards__container div.productCards img {
       height: 180px;
       width: auto;
@@ -69,15 +77,6 @@ div#index__forms {
     div#index__forms div input, div#index__forms div select {
       margin-bottom: 10px;
       width: 100%; }
-
-table {
-  width: 400px; }
-
-table, table td, table th {
-  border: 1px solid black; }
-
-#tabla__productos td img {
-  height: 100px; }
 
 * {
   margin: 0px; }
@@ -121,3 +120,47 @@ table, table td, table th {
   align-items: center;
   margin-top: 80px;
   margin-bottom: 80px; }
+
+#carrito__main {
+  width: 100vw;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  margin-bottom: 80px; }
+  #carrito__main div#productsCart__container {
+    display: flex;
+    flex-direction: column;
+    width: 80vw; }
+    #carrito__main div#productsCart__container div.products__cart {
+      height: 200px;
+      width: 100%;
+      display: flex;
+      border: 1px solid black;
+      padding: 10px;
+      margin-bottom: 15px;
+      position: relative; }
+      #carrito__main div#productsCart__container div.products__cart div.productsCart__info p.producsCart__price {
+        font-weight: bold; }
+      #carrito__main div#productsCart__container div.products__cart div.productsCart__info .productsCart__id {
+        display: none; }
+      #carrito__main div#productsCart__container div.products__cart img {
+        height: 180px;
+        width: auto;
+        margin-right: 20px; }
+      #carrito__main div#productsCart__container div.products__cart button.productsCart__delete {
+        position: absolute;
+        right: 25px;
+        bottom: 10px;
+        background-color: red;
+        color: white;
+        font-weight: bold; }
+  #carrito__main #deleteAll__button {
+    background-color: orangered;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    height: 50px;
+    width: 200px;
+    padding: 10px; }
