@@ -1,12 +1,14 @@
 const express = require("express");
+const { connectToDatabases } = require("./config.js");
 const carritoRoutes = require("./src/routes/carritoRoutes");
 const productosRoutes = require("./src/routes/productosRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => {
-  console.log("Servidor esuchhando en el puerto " + PORT);
-});
+
+connectToDatabases().then(() =>
+  app.listen(PORT, () => console.log("Server running in port " + PORT))
+);
 
 app.use(express.static("public"));
 app.use(express.json());

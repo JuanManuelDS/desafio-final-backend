@@ -3,10 +3,6 @@ Título<br /><input type="text" id="product__title" name="product__title" requir
 Precio<br /><input type="text" id="product__price" name="product__price" required><br />
 Descripción<br /><input type="text" id="product__description" name="product__description" required><br />
 URL de imágen<br /><input type="text" id="product__imageURL" name="product__imageURL" required><br />
-Categoría: <select name="product__type" id="product__type"><br />
-    <option value="ropa">Ropa</option>
-    <option value="libro">Libro</option>
-</select><br />
 <button onclick="addProduct()">Añadir producto</button>
 </div>`;
 
@@ -27,10 +23,6 @@ Nueva descripción <br><input type="text" name="productDescription" id="productD
 Nuevo precio <br><input type="text" name="productPrice" id="productPrice"><br>
 Nueva imagen <br><input type="text" name="productImage" id="productImage"><br>
 Stock <br><input type="text" name="productStock" id="productStock"><br>
-Nueva categoría <br><select name="productCategory" id="productCategory">
-    <option value="ropa">Ropa</option>
-    <option value="libro">Libro</option>
-</select><br>
 <button onclick="modifyProduct()">Modificar</button>
 </div>`;
 
@@ -75,13 +67,11 @@ function addProduct() {
   const price = document.getElementById("product__price").value;
   const description = document.getElementById("product__description").value;
   const thumbnail = document.getElementById("product__imageURL").value;
-  const type = document.getElementById("product__type").value;
   const productoPorAgregar = {
     title: title,
     price: price,
     description: description,
     thumbnail: thumbnail,
-    type: type,
   };
 
   fetch("api/productos", {
@@ -155,14 +145,12 @@ function modifyProduct() {
   const newTitle = document.getElementById("productTitle").value;
   const newPrice = document.getElementById("productPrice").value;
   const newDescription = document.getElementById("productDescription").value;
-  const newCategory = document.getElementById("productCategory").value;
   const newImage = document.getElementById("productImage").value;
   const newStock = document.getElementById("productStock").value;
   const newProductInfo = {
     title: newTitle,
     price: newPrice,
     description: newDescription,
-    type: newCategory,
     thumbnail: newImage,
     stock: newStock,
   };

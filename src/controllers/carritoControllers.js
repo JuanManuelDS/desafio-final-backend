@@ -1,18 +1,17 @@
-const Carrito = require('../carrito.js');
-const Contenedor = require('../contenedor.js');
+const Carrito = require("../daos/mainDaos.js");
+const Productos = require("../daos/mainDaos.js");
 const carrito = new Carrito();
-const productos = new Contenedor();
-
+const productos = new Productos();
 
 function getCarrito(req, res) {
   const { id } = req.params;
   const cart = carrito.getCartById(id);
-  if (cart) {
-    res.json({ success: "ok", productos: JSON.stringify(cart.productos) });
+  if (cart.found) {
+    res.json({ success: "ok", productos: JSON.stringify(cart.cart.productos) });
   } else {
     res.json({
       success: "error",
-      message: "Hubo un error al cargar el carrito",
+      message: cart.message,
     });
   }
 }
@@ -33,7 +32,7 @@ function addToCarrito(req, res) {
   const productId = req.params.id;
   const { cartId } = req.body;
   const productToAdd = productos.getById(productId);
-  const productAdded = carrito.addToCart(cartId, productToAdd);
+  const productAdded = carrito.add(cartId, productToAdd);
   if (productAdded) {
     res.json({
       success: "ok",
@@ -48,9 +47,8 @@ function addToCarrito(req, res) {
 }
 
 function deleteFromCarrito(req, res) {
-  const { id } = req.params;
-  const { id_prod } = req.params;
-  const deleted = carrito.deleteById(id, id_prod);
+  const { id, id_prod } = req.params;
+  const deleted = carrito.deleteProduct(id, id_prod);
   deleted
     ? res.json({ success: "ok", deleted: true })
     : res.json({ success: "error", deleted: false });
@@ -58,7 +56,7 @@ function deleteFromCarrito(req, res) {
 
 function deleteCarrito(req, res) {
   const cartId = req.params.id;
-  const deleted = carrito.deleteCartById(cartId);
+  const deleted = carrito.deleteCart(cartId);
   deleted ? res.json({ success: "ok" }) : res.json({ success: "error" });
 }
 

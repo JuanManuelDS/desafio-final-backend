@@ -1,7 +1,7 @@
 {
-    "name": "primera-entrega-desafio-final",
+    "name": "segunda-entrega-desafio-final",
     "version": "0.0.0",
-    "description": "primera aproximación a proyecto backend",
+    "description": "segunda aproximación a proyecto backend",
     "main": "main.js",
     "scripts": {
         "start": "node server.js",
@@ -17,8 +17,12 @@
     "dependencies": {
         "bootstrap": "^5.2.0",
         "express": "^4.18.1",
+        "firebase-admin": "^11.0.1",
         "icons": "^1.0.0",
         "moment": "^2.29.4",
-        "node-sass": "^7.0.1"
+        "mongoose": "^6.6.0"
+    },
+    "devDependencies": {
+        "node-sass": "^7.0.3"
     }
 }

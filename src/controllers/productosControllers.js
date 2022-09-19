@@ -1,59 +1,61 @@
-const Contenedor = require("../contenedor");
+const Productos = require("../daos/mainDaos.js");
 
-const productos = new Contenedor();
+const productos = new Productos();
 
-function getProductos(req, res) {
+async function getProductos(req, res) {
   const { query } = req;
   //Chequeo si hay algo en el query
   if (Object.keys(query).length === 0) {
-    res.json(productos.getAll());
+    try {
+      const productList = await productos.getAll();
+      res.status(200).json({ products: JSON.stringify(productList) });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 }
 
-function getProducto(req, res) {
+async function getProducto(req, res) {
   const { id } = req.params;
-  const productList = productos.getAll();
-  const productFound = productList.find((element) => element.id == id);
+  const productFound = await productos.getById(id);
   productFound
-    ? res.json({ success: "ok", product: productFound })
-    : res.json({
-        success: "error",
+    ? res.status(200).json({ product: productFound })
+    : res.status(404).json({
         message: `El producto con ID ${id}, no se encuentra en nuestra lista de productos`,
       });
 }
 
-function postProducto(req, res) {
+async function postProducto(req, res) {
   const { body } = req;
-  const productAdded = productos.save(body);
-  productAdded
-    ? res.json({
-        success: "ok",
-        newProduct: productos.getById(productAdded),
-      })
-    : res.json({
-        success: "error",
-        message: "Ha ocurrido un problema al agregar su producto",
-      });
+  try {
+    await productos.save(body);
+    res.status(200).json({ message: "Producto agregado correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
-function modifyProducto(req, res) {
+async function modifyProducto(req, res) {
   const { id } = req.params;
   const { body } = req;
-  if (productos.modify({ id: id, ...body })) {
-    res.json({ success: "ok" });
-  } else
-    res.json({
-      success: "error",
-      message: "Ha ocurrido algún error al intentar modificar el producto",
-    });
+  try {
+    await productos.modify({ id, ...body });
+    res.status(200).json({ message: "Producto actualizado correctamente" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 }
 
-function deleteProducto(req, res) {
+async function deleteProducto(req, res) {
   const { id } = req.params;
-  const productDeleted = productos.deleteById(id);
-  productDeleted
-    ? res.json({ success: "ok" })
-    : res.json("El producto no se encuentra en nuestra base de datos");
+  try {
+    await productos.deleteById(id);
+    res
+      .status(200)
+      .json({ message: "El producto ha sido elimiado correctamente" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 }
 
 module.exports = {
