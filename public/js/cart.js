@@ -7,11 +7,10 @@ function loadCarrito() {
   let cartId = localStorage.id;
   fetch(`api/carrito/${cartId}/productos`)
     .then((response) => response.json())
-    .then((data) => {
-      let productos = JSON.parse(data.productos);
+    .then(({ productos }) => {
       let html = productos.reduce(
         (html, item) =>
-          `<div class='products__cart'>
+          `<div class='products__cart' id=${item._id}>
               <img src=${item.thumbnail} alt="" /><div class="productsCart__info"><h4 class="productsCart__title">${item.title}</h4><p class="productsCart__id">${item.id}</p><p class='productsCart__price'>$${item.price}</p><p class='productsCart__description'>${item.description}</p></div><button class="productsCart__delete">Eliminar</button>
           </div>` + html,
         ""
@@ -29,8 +28,7 @@ function loadCarrito() {
 }
 
 function deleteProduct(event) {
-  let productId =
-    event.target.parentNode.querySelector(".productsCart__id").innerHTML;
+  let productId = event.target.parentNode.id;
   let cartId = localStorage.id;
   fetch(`/api/carrito/${cartId}/productos/${productId}`, {
     method: "DELETE",

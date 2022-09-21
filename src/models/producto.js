@@ -6,6 +6,7 @@ const productSchema = mongoose.Schema({
   description: { type: String, required: true, max: 5000 },
   thumbnail: { type: String, required: true, max: 10000 },
   timestamp: { type: Date, required: true },
+  stock: { type: Number, required: true, max: 1000 },
 });
 
 const Product = mongoose.model("Product", productSchema);

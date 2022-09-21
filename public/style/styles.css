@@ -42,7 +42,8 @@ div#productCards__container {
   flex-direction: column;
   width: 80vw; }
   div#productCards__container div.productCards {
-    height: 200px;
+    min-height: 200px;
+    height: auto;
     width: 100%;
     display: flex;
     border: 1px solid black;

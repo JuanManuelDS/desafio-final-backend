@@ -13,24 +13,32 @@ function getCartId() {
     fetch("/api/carrito", {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      body:"",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
       .then((data) => {
         cartId = data.id;
         localStorage.setItem("id", cartId);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 }
 
 function productsCardLoad() {
   fetch("/api/productos")
-    .then((res) => res.json())
-    .then((productos) => {
-      let html = productos.reduce(
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      let html = data.products.reduce(
         (html, item) =>
-          `<div class='productCards'>
-          <img src=${item.thumbnail} alt="" /><div class="productCards__info"><h4 class="productCards__title">${item.title}</h4><p class="productCards__id">${item.id}</p><p class='productCards__price'>$${item.price}</p><p class='productCards__description'>${item.description}</p></div><button class="productCards__button">Añadir al carrito</button>
+          `<div class='productCards' id=${item._id}>
+          <img src=${item.thumbnail} alt="" /><div class="productCards__info"><h4 class="productCards__title">${item.title}</h4><p class='productCards__price'>$${item.price}</p><p class='productCards__description'>${item.description}</p></div><button class="productCards__button">Añadir al carrito</button>
       </div>` + html,
         ""
       );
@@ -42,17 +50,19 @@ function productsCardLoad() {
       addToCartButtons.forEach((element) =>
         element.addEventListener("click", (event) => addToCart(event))
       );
+    })
+    .catch((err) => {
+      console.log(err);
     });
 }
 
 function addToCart(event) {
   if (cartId) {
-    const productId =
-      event.target.parentNode.querySelector(".productCards__id").innerHTML;
+    const productId = event.target.parentNode.id;
     fetch(`/api/carrito/${productId}/productos`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ cartId: cartId }),
+      body: JSON.stringify({ cartId }),
     })
       .then((response) => response.json())
       .then((data) => console.log(data.message));

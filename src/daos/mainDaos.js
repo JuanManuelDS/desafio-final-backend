@@ -1,4 +1,4 @@
-const CarritoDaos = require("./Carrito.js");
-const ProductosDaos = require("./Producto.js");
+const { Carrito: CarritoDaos } = require("./Carrito.js");
+const { Productos: ProductosDaos } = require("./Productos.js");
 
 module.exports = { CarritoDaos, ProductosDaos };

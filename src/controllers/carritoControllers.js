@@ -1,13 +1,13 @@
-const Carrito = require("../daos/mainDaos.js");
-const Productos = require("../daos/mainDaos.js");
-const carrito = new Carrito();
-const productos = new Productos();
+const { CarritoDaos } = require("../daos/mainDaos.js");
+const { ProductosDaos } = require("../daos/mainDaos.js");
+const carrito = new CarritoDaos();
+const productos = new ProductosDaos();
 
-function getCarrito(req, res) {
+async function getCarrito(req, res) {
   const { id } = req.params;
-  const cart = carrito.getCartById(id);
+  const cart = await carrito.getById(id);
   if (cart.found) {
-    res.json({ success: "ok", productos: JSON.stringify(cart.cart.productos) });
+    res.json({ success: "ok", productos: cart.cart.products });
   } else {
     res.json({
       success: "error",
@@ -16,23 +16,21 @@ function getCarrito(req, res) {
   }
 }
 
-function createCarrito(req, res) {
+async function createCarrito(req, res) {
   try {
-    const cartId = carrito.createId();
-    res.json({ success: "ok", id: cartId });
+    const cartId = await carrito.createCart();
+    res.status(200).json({ id: cartId });
   } catch (err) {
-    res.json({
-      success: "error",
-      message: "Hubo un error al intentar crear el Id del carrito",
-    });
+    res.statusText = err.message;
+    res.status(500).end();
   }
 }
 
-function addToCarrito(req, res) {
+async function addToCarrito(req, res) {
   const productId = req.params.id;
   const { cartId } = req.body;
-  const productToAdd = productos.getById(productId);
-  const productAdded = carrito.add(cartId, productToAdd);
+  const productToAdd = await productos.getById(productId);
+  const productAdded = await carrito.add(cartId, productToAdd);
   if (productAdded) {
     res.json({
       success: "ok",
@@ -46,9 +44,10 @@ function addToCarrito(req, res) {
   }
 }
 
-function deleteFromCarrito(req, res) {
+async function deleteFromCarrito(req, res) {
   const { id, id_prod } = req.params;
-  const deleted = carrito.deleteProduct(id, id_prod);
+  const productToDelete = await productos.getById(id_prod);
+  const deleted = await carrito.deleteProduct(id, productToDelete);
   deleted
     ? res.json({ success: "ok", deleted: true })
     : res.json({ success: "error", deleted: false });

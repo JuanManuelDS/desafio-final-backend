@@ -1,9 +1,15 @@
-const { carts } = require("../../config.js");
 const moment = require("moment");
+const { firebaseAdmin } = require("../../config.js");
+const FieldValue = require("firebase-admin").firestore.FieldValue;
 
 class Carrito {
+  constructor() {
+    this.db = firebaseAdmin.firestore();
+    this.carts = this.db.collection("carts");
+  }
+
   async getAll() {
-    const snapshot = await carts.get();
+    const snapshot = await this.carts.get();
     const cart = snapshot.docs.map((doc) => doc.data());
     return cart;
   }
@@ -11,7 +17,7 @@ class Carrito {
   async createCart() {
     const timestamp = moment().format("YYYY/MM/D hh:mm:ss");
     const newCart = { products: [], timestamp: timestamp };
-    const newDoc = await carts.doc();
+    const newDoc = await this.carts.doc();
     newDoc.set(newCart);
     return await newDoc.id;
   }
@@ -20,23 +26,19 @@ class Carrito {
     const search = await this.getById(cartId);
     let cartToUpdate;
     if (search.found) {
-      cartToUpdate = found.cart;
+      cartToUpdate = search.cart;
     } else {
       console.log(search.message);
       return false;
     }
-    //Chequeo si el productos está repetido, y si lo está solamente agrego una unidad más al carrito
-    const productIsRepeated = this.isRepeated(productToAdd, cartToUpdate);
-
-    if (productIsRepeated) {
-      cartToUpdate.products[productIsRepeated].quantity++;
-    } else {
-      //Quito el stock del producto del producto que voy a agregar al carrito porque no me interesa
-      const { stock, ...product } = productToAdd;
-      cartToUpdate.products.push({ ...product, quantity: 1 });
-    }
+    //Hago todo esto para parsear el objectId de mongo
+    let product = { ...productToAdd.toObject() };
+    let id = productToAdd._id;
+    product._id = id.toString();
     try {
-      await carts.doc(cartId).update(cartToUpdate);
+      await this.carts
+        .doc(cartId)
+        .update("products", FieldValue.arrayUnion(product));
       return true;
     } catch (err) {
       console.log(err.message);
@@ -44,30 +46,26 @@ class Carrito {
     }
   }
 
-  async deleteProduct(cartId, productId) {
+  async deleteProduct(cartId, productToDelete) {
     const cartSearch = await this.getById(cartId);
     let cart;
 
     if (cartSearch.found) {
-      cart = found.cart;
+      cart = cartSearch.cart;
     } else {
       console.log(cartSearch.message);
       return false;
     }
 
-    if (cart.products.length > 0) {
-      const productToDeleteIndex = cart.products.findIndex(
-        (element) => element.id == productId
-      );
-      if (productToDeleteIndex >= 0) {
-        cart.products.splice(productToDeleteIndex, 1);
-      }
-    } else {
-      cart.products = [];
-    }
+    //Hago todo esto para parsear el objectId de mongo
+    let product = { ...productToDelete.toObject() };
+    let id = productToDelete._id;
+    product._id = id.toString();
 
     try {
-      await Carts.doc(cartId).update(cart);
+      await this.carts
+        .doc(cartId)
+        .update("products", FieldValue.arrayRemove(product));
       return true;
     } catch (err) {
       console.log(err.message);
@@ -77,7 +75,7 @@ class Carrito {
 
   async deleteCart(cartId) {
     try {
-      await carts.doc(cartId).delete();
+      await this.carts.doc(cartId).delete();
       return true;
     } catch (err) {
       console.log(err.message);
@@ -98,7 +96,7 @@ class Carrito {
   }
 
   async getById(cartId) {
-    const snapshot = await carts.doc(cartId).get();
+    const snapshot = await this.carts.doc(cartId).get();
     if (!snapshot.exists) {
       return {
         found: false,
@@ -111,4 +109,4 @@ class Carrito {
   }
 }
 
-module.exports = Carrito;
+module.exports = { Carrito };

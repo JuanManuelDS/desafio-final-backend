@@ -1,45 +1,43 @@
 const Product = require("../models/producto.js");
+const moment = require("moment");
 
 class Productos {
   async getAll() {
-    return await Product.find({});
+    const products = await Product.find({});
+    return products;
   }
 
   async getById(id) {
-    const product = await Product.findOne({ _id: id });
-    return product ? product : false;
+    const product = await Product.findById(id);
+    if (!product)
+      throw Error(`No se ha encontrado ningún producto con el id ${id}`);
+    return product;
   }
 
   async deleteById(id) {
-    const deleted = await Product.deleteOne({ _id: id });
-    return deleted.deletedCount == 1 ? true : false;
+    const deleted = await Product.findByIdAndDelete(id);
+    if (!deleted)
+      throw Error(`No se ha encontrado ningún producto con el id ${id}`);
   }
 
   async save(product) {
     const newProduct = new Product({
+      timestamp: moment().format("YYYY/MM/D hh:mm:ss"),
       ...product,
     });
-    try {
-      await newProduct.save();
-      return true;
-    } catch (err) {
-      console.log(err.message);
-    }
+    await newProduct.save();
   }
 
   async modify(productId, newProductInfo) {
-    let modified = false;
-    const modifyProduct = await Product.updateOne(
+    const modifyProduct = await Product.findByIdAndUpdate(
       { _id: productId },
-      {
-        $set: {
-          ...newProductInfo,
-        },
-      }
+      newProductInfo
     );
-    if (modifyProduct.modifiedCount == 1) modified = true;
-    return modified;
+    if (modifyProduct == null)
+      throw Error(
+        "No se ha encontrado ningún producto con el id: " + productId
+      );
   }
 }
 
-module.exports = Productos;
+module.exports = { Productos };
